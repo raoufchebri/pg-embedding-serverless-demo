@@ -8,9 +8,9 @@ import {
     Tooltip,
     Legend,
 } from 'chart.js';
-import RecallExecTimeScatterPlot from './components/RecallExecTimeScatterPlot'; // Import the component
-import RecallChart from './components/RecallChart';
-import ExecTimeChart from './components/ExecTimeChart';
+import {RecallExecTimeScatterPlot} from '../components/RecallExecTimeScatterPlot'; // Import the component
+import {RecallChart} from '../components/RecallChart';
+import {ExecTimeChart} from '../components/ExecTimeChart';
 
 
 ChartJS.register(

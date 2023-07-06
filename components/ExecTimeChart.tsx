@@ -11,7 +11,7 @@ const execTimeOptions = {
     },
 };
 
-const ExecTimeChart: React.FC<ChartProps> = ({ hnswData, pgvectorData }) => {
+export const ExecTimeChart: React.FC<ChartProps> = ({ hnswData, pgvectorData }) => {
     const binWidth = 10; // You can adjust this value
     const minValue = 0;
     // const maxExecTime = Math.max(
@@ -48,5 +48,3 @@ const ExecTimeChart: React.FC<ChartProps> = ({ hnswData, pgvectorData }) => {
         </div>
     );
 };
-
-export default ExecTimeChart;

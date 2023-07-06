@@ -1,6 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { neon, neonConfig } from '@neondatabase/serverless'
+// import { Pool } from '@neondatabase/serverless'
 import resultData from '../../naive_results.json'
 import testSet from '../../test_set.json'
 
@@ -18,6 +19,13 @@ neonConfig.fetchConnectionCache = true;
 const sql = neon(
   process.env.DATABASE_URL!
 )
+
+// const pool = new Pool({
+//   connectionString: process.env.DATABASE_URL!,
+//   ssl: {
+//     rejectUnauthorized: false
+//   }
+// })
 
 export default async function handler(
   req: NextApiRequest,
@@ -46,19 +54,23 @@ export default async function handler(
 
     // set enable_seqscan to off
     sql('SET enable_seqscan = off')
+    // pool.query('SET enable_seqscan = off')
     const searchQuery = `SELECT id from vectors_hnsw order by vec <-> ARRAY[${vector}] LIMIT ${limit}`
     
     // run explain analyze query
     const explainAnalayzeSearchQuery = `EXPLAIN ANALYZE ${searchQuery}`
     const rows = await sql(explainAnalayzeSearchQuery)
+    // const {rows} = await pool.query(explainAnalayzeSearchQuery)
     const execTime = rows[rows.length - 1]['QUERY PLAN'].split(' ')[2]
 
     // run search query
+    // run search query
     const startTime = new Date().getTime();
+    
     const searchRows  = await sql(searchQuery)
-    // Record time after query execution
+    // const {rows: searchRows}  = await pool.query(searchQuery)
     const endTime = new Date().getTime();
-
+    
     latencies.push(endTime - startTime);
 
     // create index of type index is object.keys(resultData) and it is string array

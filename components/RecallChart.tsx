@@ -30,7 +30,7 @@ const recallOptions = {
     },
 };
 
-const RecallChart: React.FC<ChartProps> = ({ hnswData, pgvectorData }) => {
+export const RecallChart: React.FC<ChartProps> = ({ hnswData, pgvectorData }) => {
     const binWidth = 0.02; // You can adjust this value
     const minValue = 0;
     const maxValue = 1.0; // max recall value is 1.0
@@ -61,5 +61,3 @@ const RecallChart: React.FC<ChartProps> = ({ hnswData, pgvectorData }) => {
         </div>
     );
 };
-
-export default RecallChart;
