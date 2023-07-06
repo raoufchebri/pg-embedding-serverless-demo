@@ -23,20 +23,28 @@ type RecallExecTimeScatterPlotProps = {
   pgvectorData: Data;
 };
 
-const options = {
+const options: {
   scales: {
     y: {
-    //   beginAtZero: false,
-    //   min: 0,
       type: 'linear',
     },
     x: {
-        beginAtZero: true,
-        // max: 1,
       type: 'linear',
-    }
+      beginAtZero: true,
+    },
+  },
+} = {
+  scales: {
+    y: {
+      type: 'linear',
+    },
+    x: {
+      type: 'linear',
+      beginAtZero: true,
+    },
   },
 };
+
 
 const RecallExecTimeScatterPlot: React.FC<RecallExecTimeScatterPlotProps> = ({
   hnswData,
