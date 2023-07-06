@@ -44,7 +44,7 @@ export const RecallExecTimeScatterPlot: React.FC<RecallExecTimeScatterPlotProps>
           x: hnswData.recalls[index],
           y: execTime,
         })),
-        backgroundColor: 'rgba(53, 162, 235, 1)',
+        backgroundColor: 'rgba(240, 240, 117, 1)',
         pointRadius: 10
     },
     {
@@ -53,7 +53,7 @@ export const RecallExecTimeScatterPlot: React.FC<RecallExecTimeScatterPlotProps>
             x: pgvectorData.recalls[index],
             y: execTime,
         })),
-        backgroundColor: 'rgba(255, 99, 132, 1)',
+        backgroundColor: 'rgba(0, 229, 153, 1)',
         pointRadius: 10
       },
     ],

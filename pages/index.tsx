@@ -36,8 +36,8 @@ const App: React.FC = () => {
     const [pgvectorData, setPgvectorData] = useState<Data | null>(null);
 
     const fetchData = async () => {
-        const hnswResponse = await fetch(`api/embedding`);
-        const pgvectorResponse = await fetch(`api/vector`);
+        const hnswResponse = await fetch(`/api/embedding`);
+        const pgvectorResponse = await fetch(`/api/vector`);
         const hnswData = await hnswResponse.json();
         const pgvectorData = await pgvectorResponse.json();
         setHnswData(hnswData);

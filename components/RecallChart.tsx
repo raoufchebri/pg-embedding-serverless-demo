@@ -44,12 +44,12 @@ export const RecallChart: React.FC<ChartProps> = ({ hnswData, pgvectorData }) =>
             {
                 label: 'pg_embedding',
                 data: hnswHistogramData.bins,
-                backgroundColor: 'rgba(53, 162, 235, 1)',
+                backgroundColor: 'rgba(240, 240, 117, 1)',
             },
             {
                 label: 'pgvector',
                 data: pgvectorHistogramData.bins,
-                backgroundColor: 'rgba(255, 99, 132, 1)',
+                backgroundColor: 'rgba(0, 229, 153, 1)',
             }
         ],
     };
