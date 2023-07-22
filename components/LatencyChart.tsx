@@ -39,7 +39,7 @@ export const LatencyChart: React.FC<ChartProps> = ({ hnswData, pgvectorData }) =
                 fill: false,
             },
             {
-                label: 'pgvector',
+                label: 'pinecone',
                 data: pgvectorData.latencies,
                 borderColor: 'rgba(0, 229, 153, 1)',
                 backgroundColor: 'rgba(0, 229, 153, 0.5)',
