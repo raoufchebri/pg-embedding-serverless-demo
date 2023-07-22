@@ -11,6 +11,7 @@ import {
 import {RecallExecTimeScatterPlot} from '../components/RecallExecTimeScatterPlot'; // Import the component
 import {RecallChart} from '../components/RecallChart';
 import {ExecTimeChart} from '../components/ExecTimeChart';
+import { LatencyChart } from '@/components/LatencyChart';
 
 
 ChartJS.register(
@@ -33,18 +34,27 @@ type Data = {
 
 const App: React.FC = () => {
     const [hnswData, setHnswData] = useState<Data | null>(null);
-    const [pgvectorData, setPgvectorData] = useState<Data | null>(null);
+    // const [pgvectorData, setPgvectorData] = useState<Data | null>(null);
+    const [pineconeData, setPineconeData] = useState<Data | null>(null);
     const [cpuData, setCpuData] = useState<number | null>(null);
+
+    console.log(hnswData);
+    console.log(pineconeData);
 
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
     const fetchData = async () => {
         const hnswResponse = await fetch(`/api/embedding`);
-        const pgvectorResponse = await fetch(`/api/vector`);
+        // const pgvectorResponse = await fetch(`/api/vector`);
+        const pineconeResponse = await fetch(`/api/pinecone`);
+
         const hnswData = await hnswResponse.json();
-        const pgvectorData = await pgvectorResponse.json();
+        // const pgvectorData = await pgvectorResponse.json();
+        const pineconeData = await pineconeResponse.json();
+
         setHnswData(hnswData);
-        setPgvectorData(pgvectorData);
+        // setPgvectorData(pgvectorData);
+        setPineconeData(pineconeData);
     };
 
     const fetchCpuData = async () => {
@@ -81,11 +91,17 @@ const App: React.FC = () => {
                         Recall: {hnswData && hnswData.recall.toFixed(3)}<br />
                         Average Latency: {hnswData && (hnswData.latencies.reduce((a, b) => a + b, 0) / hnswData.latencies.length).toFixed(2)} ms
                     </div>
-                    <div>
+                    {/* <div>
                         <strong>pgvector:</strong><br />
                         Execution Time: {pgvectorData && pgvectorData.execTime.toFixed(2)} ms<br />
                         Recall: {pgvectorData && pgvectorData.recall.toFixed(3)}<br />
                         Average Latency: {pgvectorData && (pgvectorData.latencies.reduce((a, b) => a + b, 0) / pgvectorData.latencies.length).toFixed(2)} ms
+                    </div> */}
+                    <div>
+                        <strong>Pinecone:</strong><br />
+                        Execution Time: N/A<br />
+                        Recall: {pineconeData && pineconeData.recall.toFixed(3)}<br />
+                        Average Latency: {pineconeData && (pineconeData.latencies.reduce((a, b) => a + b, 0) / pineconeData.latencies.length).toFixed(2)} ms
                     </div>
                     {cpuData !== null && (
                         <div style={{ marginLeft: '20px' }}>
@@ -94,23 +110,26 @@ const App: React.FC = () => {
                         </div>
                     )}
                 </div>
-          {hnswData && pgvectorData ? (
-                <>
-                  <div style={{ width: '100%', marginBottom: '20px' }}>
-                      <ExecTimeChart hnswData={hnswData} pgvectorData={pgvectorData} />
-                  </div>
-                  <div style={{ width: '100%', marginBottom: '20px' }}>
-                      <RecallChart hnswData={hnswData} pgvectorData={pgvectorData} />
-                  </div>
-                  <div style={{ width: '100%' }}>
-                      <RecallExecTimeScatterPlot hnswData={hnswData} pgvectorData={pgvectorData} />
-                  </div>
-                </>
-          ) : (
-              <div className="flex items-center justify-center min-h-screen">
-                  <div className="text-xl">Loading...</div>
-              </div>
-          )}
+                {hnswData && pineconeData ? (
+                    <>
+                        <div style={{ width: '100%', marginBottom: '20px' }}>
+                            <LatencyChart hnswData={hnswData} pgvectorData={pineconeData} />
+                        </div>
+                        {/* <div style={{ width: '100%', marginBottom: '20px' }}>
+                            <ExecTimeChart hnswData={hnswData} pgvectorData={pgvectorData} />
+                        </div>
+                        <div style={{ width: '100%', marginBottom: '20px' }}>
+                            <RecallChart hnswData={hnswData} pgvectorData={pgvectorData} />
+                        </div>
+                        <div style={{ width: '100%' }}>
+                            <RecallExecTimeScatterPlot hnswData={hnswData} pgvectorData={pgvectorData} />
+                        </div> */}
+                    </>
+                ) : (
+                    <div className="flex items-center justify-center min-h-screen">
+                        <div className="text-xl">Loading...</div>
+                    </div>
+                )}
           </div>
       </>
   );

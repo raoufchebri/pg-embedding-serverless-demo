@@ -1,7 +1,6 @@
+// pinecone.ts
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { neon, neonConfig } from '@neondatabase/serverless'
-// import { Pool } from '@neondatabase/serverless'
 import resultData from '../../naive_results.json'
 import testSet from '../../test_set.json'
 
@@ -15,24 +14,19 @@ type Data = {
 
 type IndexType = keyof typeof resultData;
 
-neonConfig.fetchConnectionCache = true;
-const sql = neon(
-  process.env.DATABASE_URL!
-)
+const url = process.env.PINECONE_URL ?? '';
+const apiKey = process.env.PINECONE_API_KEY ?? '';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
   console.log(req.query)
-  // extract limit from request and parse it to int
   const limit = parseInt(req.query.limit as string) || 100
-  // extract test limit from request and parse it to int
   const testLimit = parseInt(req.query.testLimit as string) || 10
 
   console.log(`Running test with limit ${limit} and testLimit ${testLimit}`)
 
-  // extract 10 first vectors from test_set.json. test_set.json contains array of arrays of numbers
   const testVectors = testSet.slice(0, testLimit)
 
   const recalls = []
@@ -45,33 +39,42 @@ export default async function handler(
 
     const vector = testVectors[i]
 
-    // set enable_seqscan to off
-    sql('SET enable_seqscan = off')
-    const searchQuery = `SELECT _id from documents order by openai <-> ARRAY[${vector}] LIMIT ${limit}`
-    
-    // run explain analyze query
-    const explainAnalayzeSearchQuery = `EXPLAIN ANALYZE ${searchQuery}`
-    const rows = await sql(explainAnalayzeSearchQuery)
-    const execTime = rows[rows.length - 1]['QUERY PLAN'].split(' ')[2]
-
-    // run search query
     const startTime = new Date().getTime();
-    const searchRows  = await sql(searchQuery)
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Api-Key': apiKey
+      },
+      body: JSON.stringify({
+        "vector": vector,
+        "topK": limit,
+        "includeMetadata": true,
+        "includeValues": true,
+        "namespace": "p"
+      })
+    })
+
     const endTime = new Date().getTime();
-    
+
     latencies.push(endTime - startTime);
 
-    // create index of type index is object.keys(resultData) and it is string array
+    const { matches } = await response.json()
+
+    const searchRows = matches.map(({_id}: {_id: string}) => _id)
+
     const index: IndexType = i.toString() as keyof typeof resultData || '0'
 
     const resultIds = resultData[index].slice(0, limit)
 
-    recalls.push(searchRows.filter((row) => resultIds.includes(row.id)).length / limit)
-    execTimes.push(execTime)
+    recalls.push(searchRows.filter((id: string) => resultIds.includes(id)).length / limit)
+    execTimes.push(endTime - startTime)
   }
 
   const recall = recalls.reduce((a, b) => a + b, 0) / recalls.length
-  const execTime = execTimes.reduce((a, b) => a + parseFloat(b), 0) / execTimes.length
+  const execTime = latencies.reduce((a, b) => a + b, 0) / latencies.length
 
-  res.status(200).json({ execTime, recall, recalls, execTimes, latencies })
+
+  res.status(200).json({ execTime, recall, recalls, execTimes: latencies, latencies })
 }
