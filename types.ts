@@ -9,5 +9,6 @@ export type Data = {
 
 export type ChartProps = {
     hnswData: Data,
-    pgvectorData: Data
+    pgvectorData?: Data
+    pineconeData?: Data
 };

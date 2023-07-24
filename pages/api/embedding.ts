@@ -1,7 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { neon, neonConfig } from '@neondatabase/serverless'
-// import { Pool } from '@neondatabase/serverless'
 import resultData from '../../naive_results.json'
 import testSet from '../../test_set.json'
 
@@ -17,7 +16,7 @@ type IndexType = keyof typeof resultData;
 
 neonConfig.fetchConnectionCache = true;
 const sql = neon(
-  process.env.DATABASE_URL!
+  process.env.EMBEDDING_DATABASE_URL!
 )
 
 export default async function handler(
@@ -66,10 +65,9 @@ export default async function handler(
 
     const resultIds = resultData[index].slice(0, limit)
 
-    recalls.push(searchRows.filter((row) => resultIds.includes(row.id)).length / limit)
+    recalls.push(searchRows.filter((row) => resultIds.includes(row._id)).length / limit)
     execTimes.push(execTime)
   }
-
   const recall = recalls.reduce((a, b) => a + b, 0) / recalls.length
   const execTime = execTimes.reduce((a, b) => a + parseFloat(b), 0) / execTimes.length
 

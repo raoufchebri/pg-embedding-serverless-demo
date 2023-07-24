@@ -25,26 +25,33 @@ const latencyOptions = {
     },
 };
 
-export const LatencyChart: React.FC<ChartProps> = ({ hnswData, pgvectorData }) => {
-    const labels = hnswData.latencies.map((_, index) => `Latency ${index + 1}`);
+export const LatencyChart: React.FC<ChartProps> = ({ hnswData, pineconeData, pgvectorData }) => {
+    const labels = hnswData?.latencies.map((_, index) => `${index + 1}`);
 
     const chartData = {
         labels,
         datasets: [
             {
                 label: 'pg_embedding',
-                data: hnswData.latencies,
+                data: hnswData?.latencies,
                 borderColor: 'rgba(240, 240, 117, 1)',
                 backgroundColor: 'rgba(240, 240, 117, 0.5)',
                 fill: false,
             },
             {
                 label: 'pinecone',
-                data: pgvectorData.latencies,
+                data: pineconeData?.latencies,
                 borderColor: 'rgba(0, 229, 153, 1)',
                 backgroundColor: 'rgba(0, 229, 153, 0.5)',
                 fill: false,
-            }
+            },
+            // {
+            //     label: 'pgvector',
+            //     data: pgvectorData?.latencies,
+            //     borderColor: 'rgba(255, 99, 132, 1)',
+            //     backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            //     fill: false,
+            // }
         ],
     };
 

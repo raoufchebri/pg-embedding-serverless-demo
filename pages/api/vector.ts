@@ -16,7 +16,7 @@ type IndexType = keyof typeof resultData;
 
 neonConfig.fetchConnectionCache = true;
 const sql = neon(
-  process.env.DATABASE_URL!
+  process.env.VECTOR_DATABASE_URL!
 )
 
 export default async function handler(
@@ -47,7 +47,7 @@ export default async function handler(
     // set enable_seqscan to off
     sql('SET enable_seqscan = off;')
     sql('SET ivfflat.probes = 100;')
-    const searchQuery = `SELECT id from vectors_pgvector order by vec <-> '[${vector}]' LIMIT ${limit}`
+    const searchQuery = `SELECT _id from documents order by openai_vector <-> '[${vector}]' LIMIT ${limit}`
     
     // run explain analyze query
     const explainAnalayzeSearchQuery = `EXPLAIN ANALYZE ${searchQuery}`
@@ -57,7 +57,6 @@ export default async function handler(
     // run search query
     const startTime = new Date().getTime();
     const searchRows  = await sql(searchQuery)
-    // Record time after query execution
     const endTime = new Date().getTime();
 
     latencies.push(endTime - startTime);
@@ -68,7 +67,7 @@ export default async function handler(
 
     const resultIds = resultData[index].slice(0, limit)
 
-    recalls.push(searchRows.filter((row) => resultIds.includes(row.id)).length / limit)
+    recalls.push(searchRows.filter((row) => resultIds.includes(row._id)).length / limit)
     execTimes.push(execTime)
   }
 

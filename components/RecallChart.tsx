@@ -30,13 +30,14 @@ const recallOptions = {
     },
 };
 
-export const RecallChart: React.FC<ChartProps> = ({ hnswData, pgvectorData }) => {
+export const RecallChart: React.FC<ChartProps> = ({ hnswData, pgvectorData, pineconeData }) => {
     const binWidth = 0.02; // You can adjust this value
     const minValue = 0;
     const maxValue = 1.0; // max recall value is 1.0
-
+    
     const hnswHistogramData = createHistogramData(hnswData.recalls, binWidth, minValue, maxValue);
-    const pgvectorHistogramData = createHistogramData(pgvectorData.recalls, binWidth, minValue, maxValue);
+    // const pgvectorHistogramData = createHistogramData(pgvectorData.recalls, binWidth, minValue, maxValue);
+    // const pineconeHistogramData = createHistogramData(pineconeData.recalls, binWidth, minValue, maxValue);
 
     const chartData = {
         labels: hnswHistogramData.labels,
@@ -46,11 +47,18 @@ export const RecallChart: React.FC<ChartProps> = ({ hnswData, pgvectorData }) =>
                 data: hnswHistogramData.bins,
                 backgroundColor: 'rgba(240, 240, 117, 1)',
             },
-            {
-                label: 'pgvector',
-                data: pgvectorHistogramData.bins,
-                backgroundColor: 'rgba(0, 229, 153, 1)',
-            }
+            // {
+            //     label: 'pinecone',
+            //     data: pineconeHistogramData.bins,
+            //     backgroundColor: 'rgba(0, 229, 153, 1)',
+            // },
+            // {
+            //     label: 'pgvector',
+            //     data: pgvectorData?.latencies,
+            //     borderColor: 'rgba(255, 99, 132, 1)',
+            //     backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            //     fill: false,
+            // }
         ],
     };
 

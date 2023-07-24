@@ -23,7 +23,7 @@ export default async function handler(
 ) {
   console.log(req.query)
   const limit = parseInt(req.query.limit as string) || 100
-  const testLimit = parseInt(req.query.testLimit as string) || 100
+  const testLimit = parseInt(req.query.testLimit as string) || 10
 
   console.log(`Running test with limit ${limit} and testLimit ${testLimit}`)
 
@@ -62,7 +62,7 @@ export default async function handler(
 
     const { matches } = await response.json()
 
-    const searchRows = matches.map(({_id}: {_id: string}) => _id)
+    const searchRows = matches.map(({id}: {id: string}) => id)
 
     const index: IndexType = i.toString() as keyof typeof resultData || '0'
 

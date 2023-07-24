@@ -12,7 +12,7 @@ type IndexType = keyof typeof resultData;
 
 neonConfig.fetchConnectionCache = true;
 const sql = neon(
-  process.env.DATABASE_URL!
+  process.env.VECTOR_DATABASE_URL!
 )
 
 export default async function handler(
