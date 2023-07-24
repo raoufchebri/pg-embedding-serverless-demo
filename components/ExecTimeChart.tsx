@@ -22,7 +22,7 @@ export const ExecTimeChart: React.FC<ChartProps> = ({ hnswData, pgvectorData }) 
     const maxValue = Math.ceil(maxExecTime / binWidth) * binWidth;
 
     const hnswHistogramData = createHistogramData(hnswData.execTimes, binWidth, minValue, maxValue, true);
-    const pgvectorHistogramData = createHistogramData(pgvectorData.execTimes, binWidth, minValue, maxValue, true);
+    // const pgvectorHistogramData = createHistogramData(pgvectorData.execTimes, binWidth, minValue, maxValue, true);
     
 
     const chartData = {
@@ -33,11 +33,11 @@ export const ExecTimeChart: React.FC<ChartProps> = ({ hnswData, pgvectorData }) 
                 data: hnswHistogramData.bins,
                 backgroundColor: 'rgba(240, 240, 117, 1)',
             },
-            {
-                label: 'pgvector',
-                data: pgvectorHistogramData.bins,
-                backgroundColor: 'rgba(0, 229, 153, 1)',
-            }
+            // {
+            //     label: 'pgvector',
+            //     data: pgvectorHistogramData.bins,
+            //     backgroundColor: 'rgba(0, 229, 153, 1)',
+            // }
         ],
     };
 
