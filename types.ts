@@ -10,5 +10,5 @@ export type Data = {
 export type ChartProps = {
     hnswData: Data,
     pgvectorData?: Data
-    pineconeData?: Data
+    pineconeData: Data
 };

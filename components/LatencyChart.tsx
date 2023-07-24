@@ -25,7 +25,7 @@ const latencyOptions = {
     },
 };
 
-export const LatencyChart: React.FC<ChartProps> = ({ hnswData, pineconeData, pgvectorData }) => {
+export const LatencyChart: React.FC<ChartProps> = ({ hnswData, pineconeData }) => {
     const labels = hnswData?.latencies.map((_, index) => `${index + 1}`);
 
     const chartData = {

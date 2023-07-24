@@ -23,7 +23,7 @@ export default async function handler(
 ) {
   console.log(req.query)
   const limit = parseInt(req.query.limit as string) || 100
-  const testLimit = parseInt(req.query.testLimit as string) || 10
+  const testLimit = parseInt(req.query.testLimit as string) || 20
 
   console.log(`Running test with limit ${limit} and testLimit ${testLimit}`)
 

@@ -27,7 +27,7 @@ export default async function handler(
   // extract limit from request and parse it to int
   const limit = parseInt(req.query.limit as string) || 100
   // extract test limit from request and parse it to int
-  const testLimit = parseInt(req.query.testLimit as string) || 100
+  const testLimit = parseInt(req.query.testLimit as string) || 20
 
   console.log(`Running test with limit ${limit} and testLimit ${testLimit}`)
 

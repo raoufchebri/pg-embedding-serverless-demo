@@ -46,15 +46,15 @@ const App: React.FC = () => {
     const fetchData = async () => {
         const hnswResponse = await fetch(`/api/embedding`);
         // const pgvectorResponse = await fetch(`/api/vector`);
-        // const pineconeResponse = await fetch(`/api/pinecone`);
+        const pineconeResponse = await fetch(`/api/pinecone`);
 
         const hnswData = await hnswResponse.json();
         // const pgvectorData = await pgvectorResponse.json();
-        // const pineconeData = await pineconeResponse.json();
+        const pineconeData = await pineconeResponse.json();
 
         setHnswData(hnswData);
         // setPgvectorData(pgvectorData);
-        // setPineconeData(pineconeData);
+        setPineconeData(pineconeData);
     };
 
     const fetchCpuData = async () => {
@@ -97,12 +97,12 @@ const App: React.FC = () => {
                         Recall: {pgvectorData && pgvectorData.recall.toFixed(3)}<br />
                         Average Latency: {pgvectorData && (pgvectorData.latencies.reduce((a, b) => a + b, 0) / pgvectorData.latencies.length).toFixed(2)} ms
                     </div> */}
-                    {/* <div>
+                    <div>
                         <strong>Pinecone:</strong><br />
                         Execution Time: N/A<br />
                         Recall: {pineconeData && pineconeData.recall.toFixed(3)}<br />
                         Average Latency: {pineconeData && (pineconeData.latencies.reduce((a, b) => a + b, 0) / pineconeData.latencies.length).toFixed(2)} ms
-                    </div> */}
+                    </div>
                     {cpuData !== null && (
                         <div style={{ marginLeft: '20px' }}>
                             <strong>Number of CPUs:</strong><br />
@@ -110,13 +110,13 @@ const App: React.FC = () => {
                         </div>
                     )}
                 </div>
-                {hnswData ? (
+                {hnswData && pineconeData ? (
                     <>
                         <div style={{ width: '100%', marginBottom: '20px' }}>
-                            <LatencyChart hnswData={hnswData}/>
+                            <LatencyChart hnswData={hnswData} pineconeData={pineconeData}/>
                         </div>
                         <div style={{ width: '100%', marginBottom: '20px' }}>
-                            <RecallChart hnswData={hnswData} />
+                            <RecallChart hnswData={hnswData} pineconeData={pineconeData}/>
                         </div>
                         {/* <div style={{ width: '100%', marginBottom: '20px' }}>
                             <ExecTimeChart hnswData={hnswData} pgvectorData={pgvectorData} />
